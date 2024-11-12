@@ -1,0 +1,128 @@
+<h2 class="flex justify-center mb-6 text-2xl font-bold">
+  🏪 Listado de Customers - Parcial Practico TecWeb
+</h2>
+<p class="flex justify-center font-bold text-xl mb-8">
+  Integrantes: <span class="ml-2 text-sky-500">Sergio Romero y William Gomez</span>
+</p>
+<div class="flex flex-col w-full px-14">
+  <form
+    [formGroup]="form"
+    class="flex flex-col justify-center gap-4 w-full mx-auto"
+  >
+    <div class="flex justify-center gap-4">
+      <select
+        name="customersList"
+        id="customers"
+        formControlName="customerNumber"
+        [(ngModel)]="customerNumber"
+        class="w-fit bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 h-14"
+      >
+        @for (customer of customers; track customer) {
+        <option value="{{ customer.customerNumber }}">
+          {{ customer.customerName }}
+        </option>
+        }
+      </select>
+      <button
+        type="submit"
+        class="h-14 flex flex-row w-fit justify-center items-center gap-2 py-3 px-4 mb-8 bg-gradient-to-tr from-sky-400 to-sky-600 rounded-md border-2 border-sky-300 text-white font-bold transition-all duration-200 ease-in-out hover:scale-105 hover:bg-gradient-to-tr hover:from-sky-600 hover:to-sky-700"
+        (click)="showAllOrdersFromCustomer()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"
+          />
+        </svg>
+        <span>Listar Orders del Customer</span>
+      </button>
+    </div>
+    @if(ordersFromCustomer) {
+    <div class="flex justify-center gap-4">
+      <select
+        name="orderList"
+        id="orders"
+        formControlName="orderNumber"
+        [(ngModel)]="orderNumber"
+        class="w-fit bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 h-14"
+      >
+        @for (order of ordersFromCustomer; track order) {
+        <option value="{{ order.orderNumber }}">{{ order.orderNumber }}</option>
+        }
+      </select>
+      <button
+        type="submit"
+        class="h-14 flex flex-row w-fit justify-center items-center gap-2 py-3 px-4 mb-8 bg-gradient-to-tr from-indigo-400 to-indigo-600 rounded-md border-2 border-indigo-300 text-white font-bold transition-all duration-200 ease-in-out hover:scale-105 hover:bg-gradient-to-tr hover:from-indigo-600 hover:to-indigo-700"
+        (click)="showOrderDetails()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+          />
+        </svg>
+        <span>Listar Informacion del Order</span>
+      </button>
+    </div>
+    }
+  </form>
+  @if(orderDetails) {
+  <div class="flex justify-center gap-4 flex-wrap mb-6">
+    <p><strong>CustomerNumber:</strong> {{ customerNumber }}</p>
+    <p><strong>CustomerName:</strong> {{ orderData.customerName }}</p>
+    <p><strong>Phone:</strong> {{ orderData.customerPhone }}</p>
+  </div>
+  <div class="flex justify-center gap-4 flex-wrap mb-6">
+    <p><strong>OrderNumber:</strong> {{ orderData.orderNumber }}</p>
+    <p><strong>OrderDate:</strong> {{ orderData.orderDate }}</p>
+  </div>
+  <div class="flex justify-center gap-4 flex-wrap mb-6">
+    <p>
+      <strong>Employee:</strong> {{ orderData.employeeFirstName }}
+      {{ orderData.employeeLastName }}
+    </p>
+  </div>
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <tr>
+        <th class="px-6 py-3">product code</th>
+        <th class="px-6 py-3">product name</th>
+        <th class="px-6 py-3">quantity ordered</th>
+        <th class="px-6 py-3">price each</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orderDetails[1]; track order) {
+      <tr class="bg-white border-b">
+        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+          {{ order.productCode }}
+        </th>
+        <td class="px-6 py-4">{{ order.productName }}</td>
+        <td class="px-6 py-4">{{ order.quantityOrdered }}</td>
+        <td class="px-6 py-4">{{ order.priceEach }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  <h1 class="w-full my-6 flex justify-end font-bold text-xl">
+    <strong>Total de la Orden:</strong>
+    <span class="ml-2 text-rose-500">${{ totalPrice }}</span>
+  </h1>
+  }
+</div>
